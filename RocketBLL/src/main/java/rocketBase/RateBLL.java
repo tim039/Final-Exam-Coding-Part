@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import org.apache.poi.ss.formula.functions.FinanceLib;
 
 import exceptions.RateException;
-import rocketData.LoanRequest;
 import rocketDomain.RateDomainModel;
 
 public class RateBLL {
@@ -24,20 +23,20 @@ public class RateBLL {
 
 		ArrayList<RateDomainModel> alRates = _RateDAL.getAllRates();
 	
-		double currentRate = 0.0;
+		double rate1 = 0.0;
 			for (RateDomainModel r : alRates) {
 				if (GivenCreditScore >= r.getiMinCreditScore()) {
-					currentRate = r.getdInterestRate();
+					rate1 = r.getdInterestRate();
 				}
 			
-			if (currentRate < 0.0) {
+			if (rate1 < 0.0) {
 				throw new RateException(r);
 			}
 			}
 				
 		
 		//			obviously this should be changed to return the determined rate
-		return currentRate;
+		return rate1;
 		
 	}
 		

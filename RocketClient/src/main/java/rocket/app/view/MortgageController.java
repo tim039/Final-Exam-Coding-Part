@@ -1,6 +1,7 @@
 package rocket.app.view;
 
 import eNums.eAction;
+import exceptions.RateException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -8,6 +9,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import rocket.app.MainApp;
+import rocketBase.RateBLL;
 import rocketCode.Action;
 import rocketData.LoanRequest;
 
@@ -15,7 +17,6 @@ public class MortgageController {
 
 	private MainApp mainApp;
 	
-	//	TODO - RocketClient.RocketMainController
 	
 	//	Create private instance variables for:
 	//		TextBox  - 	txtIncome
@@ -67,20 +68,29 @@ public class MortgageController {
 	@FXML
 	public void btnCalculatePayment(ActionEvent event)
 	{
-		Object message = null;
-		//	TODO - RocketClient.RocketMainController
-		
+		Object message = null;		
 		Action a = new Action(eAction.CalculatePayment);
 		LoanRequest lq = new LoanRequest();
 		
 		//			set the loan request details...  rate, term, amount, credit score, downpayment
-		
+		try {
+			lq.setdRate(RateBLL.getRate(lq.getiCreditScore()));
+			if (cmbTerm.getValue() == "15 Years") {
+				lq.setiTerm(15);
+			}
+			else {
+				lq.setiTerm(30);
+			}
 		lq.setdRate(Double.parseDouble(txtHouseCost.getText())-Double.parseDouble(txtDownPayment.getText()));
 		lq.setiTerm(Integer.parseInt(cmbTerm.getStyle()));
 		lq.setdIncome(Double.parseDouble((txtIncome.getText())));
 		lq.setiCreditScore(Integer.parseInt(txtCreditScore.getText()));
 		lq.setiDownPayment(Integer.parseInt(txtDownPayment.getText()));
+		}
 		
+		catch(RateException e) {
+			exception.setText("No rate found.");
+		}
 		//			I've created you an instance of lq...  execute the setters in lq
 		
 		a.setLoanRequest(lq);
@@ -99,18 +109,23 @@ public class MortgageController {
 		
 		double PITI1 = (lRequest.getdIncome() * 0.28);
 		double PITI2 = ((lRequest.getdIncome() * 0.36) - lRequest.getdExpenses());
-		
+		double realPITI;
 		//double PITI = Math.min((lRequest.getdIncome() - lRequest.getdExpenses()) * 0.36, lRequest.getdIncome() * 0.28);
 		//lblMortgagePayment.setText(String.format("%.2f", -lRequest.getdPayment()));
 		
-		if (PITI >= Math.abs(lRequest.getdPayment())) {
-			msgReturn.setText("You can afford this payment.");
+		if (PITI1 < PITI2) {
+			realPITI = PITI1;
 		}
 		else{
-			msgReturn.setText("You cannot afford this payment.");
+			realPITI = PITI2;
 		}
 		
-			
+		if (lRequest.getdPayment() > realPITI) {
+			exception.setText("House costs too much");
+		}
+		else {
+			lblMortgagePayment.setText((String.format("%.2f", lRequest.getdPayment())));
+		}
 		
 		
 	}
