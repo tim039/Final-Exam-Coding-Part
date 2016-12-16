@@ -29,6 +29,7 @@
             </ContextMenu>
          </contextMenu>
       </ComboBox>
-      <Button layoutX="499.0" layoutY="349.0" mnemonicParsing="false" text="Calculate" />
+      <Button layoutX="364.0" layoutY="345.0" mnemonicParsing="false" text="Calculate" />
+      <Label layoutX="448.0" layoutY="349.0" prefHeight="17.0" prefWidth="138.0" text="mortgage payment" />
    </children>
 </AnchorPane>

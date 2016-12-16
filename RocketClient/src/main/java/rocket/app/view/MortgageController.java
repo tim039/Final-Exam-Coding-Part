@@ -44,7 +44,7 @@ public class MortgageController {
 	private TextField txtDownPayment;
 	
 	@FXML
-	private ComboBox<String> cmbTerm;
+	private ComboBox<String> Term;
 	
 	@FXML
 	private Label lblMortgagePayment;
@@ -57,14 +57,14 @@ public class MortgageController {
 	
 	@FXML 
 	private Label exception;
+	
 
 	public void setMainApp(MainApp mainApp) {
 		this.mainApp = mainApp;
 	}
 	
 	
-	//	TODO - RocketClient.RocketMainController
-	//			Call this when btnPayment is pressed, calculate the payment
+	
 	@FXML
 	public void btnCalculatePayment(ActionEvent event)
 	{
@@ -75,14 +75,14 @@ public class MortgageController {
 		//			set the loan request details...  rate, term, amount, credit score, downpayment
 		try {
 			lq.setdRate(RateBLL.getRate(lq.getiCreditScore()));
-			if (cmbTerm.getValue() == "15 Years") {
+			if (Term.getValue() == "15 Years") {
 				lq.setiTerm(15);
 			}
 			else {
 				lq.setiTerm(30);
 			}
 		lq.setdRate(Double.parseDouble(txtHouseCost.getText())-Double.parseDouble(txtDownPayment.getText()));
-		lq.setiTerm(Integer.parseInt(cmbTerm.getStyle()));
+		lq.setiTerm(Integer.parseInt(Term.getStyle()));
 		lq.setdIncome(Double.parseDouble((txtIncome.getText())));
 		lq.setiCreditScore(Integer.parseInt(txtCreditScore.getText()));
 		lq.setiDownPayment(Integer.parseInt(txtDownPayment.getText()));
@@ -101,11 +101,7 @@ public class MortgageController {
 	
 	public void HandleLoanRequestDetails(LoanRequest lRequest)
 	{
-		//	TODO - RocketClient.HandleLoanRequestDetails
-		//			lRequest is an instance of LoanRequest.
-		//			after it's returned back from the server, the payment (dPayment)
-		//			should be calculated.
-		//			Display dPayment on the form, rounded to two decimal places
+		
 		
 		double PITI1 = (lRequest.getdIncome() * 0.28);
 		double PITI2 = ((lRequest.getdIncome() * 0.36) - lRequest.getdExpenses());

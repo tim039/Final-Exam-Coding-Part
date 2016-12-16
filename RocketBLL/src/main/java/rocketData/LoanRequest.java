@@ -13,10 +13,7 @@ public class LoanRequest implements Serializable {
 	private double dIncome;
 	private double dExpenses;
 	
-	//			missing attributes...
-	//			Income
-	//			Expenses
-	//			Add these attributes to the class... add getters and setters.
+	
 	
 	public LoanRequest() {
 		super();
